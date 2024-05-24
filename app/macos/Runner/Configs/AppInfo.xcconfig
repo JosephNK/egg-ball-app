@@ -8,7 +8,7 @@
 PRODUCT_NAME = eggball
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = com.jospehnk.eggball
+PRODUCT_BUNDLE_IDENTIFIER = com.josephnk.eggball
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2024 com.jospehnk. All rights reserved.
+PRODUCT_COPYRIGHT = Copyright © 2024 com.josephnk. All rights reserved.
