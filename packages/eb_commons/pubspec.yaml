@@ -1,0 +1,28 @@
+name: eb_commons
+description: "A new Flutter package project."
+publish_to: 'none'
+version: 0.0.1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  collection: ^1.18.0
+
+  # flutter_leaf_kit
+  flutter_leaf_kit:
+    git:
+      url: https://github.com/JosephNK/flutter_leaf_kit.git
+      ref: 'v1.9.20-dev'
+      path: ./packages/leaf
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:

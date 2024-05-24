@@ -1,0 +1,40 @@
+name: eb_resource
+description: "A new Flutter package project."
+publish_to: 'none'
+version: 0.0.1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  flutter_svg: ^2.0.10+1
+  vector_graphics: ^1.1.11+1
+  lottie: ^3.1.0
+
+  # Project Packages
+  eb_commons: 0.0.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+
+  assets:
+
+  # Lang Resource
+  - assets/lang/
+
+  # Icon Resource
+  - assets/icon/
+
+  # Image Resource
+  - assets/image/
+
+  # Lottie Resource
+  - assets/lottie/
