@@ -30,11 +30,11 @@ flutter:
   # Lang Resource
   - assets/lang/
 
-  # Icon Resource
-  - assets/icon/
-
-  # Image Resource
-  - assets/image/
-
-  # Lottie Resource
-  - assets/lottie/
+#  # Icon Resource
+#  - assets/icon/
+#
+#  # Image Resource
+#  - assets/image/
+#
+#  # Lottie Resource
+#  - assets/lottie/

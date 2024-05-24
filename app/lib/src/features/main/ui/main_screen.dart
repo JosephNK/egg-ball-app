@@ -2,6 +2,8 @@ import 'package:eb_resource/eb_resource.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_leaf_kit/flutter_leaf_kit_component.dart';
 
+import '../../home/ui/home_screen.dart';
+
 class MainScreen extends ScreenStatefulWidget {
   const MainScreen({super.key});
 
@@ -69,6 +71,6 @@ class _MainScreenState extends ScreenState<MainScreen>
 
   @override
   Widget buildBody(BuildContext context, Object? state) {
-    return const Placeholder();
+    return const HomeScreen();
   }
 }

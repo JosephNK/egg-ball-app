@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_leaf_kit/flutter_leaf_kit.dart';
 
 import 'src/app.dart';
+import 'src/features/main/blocs/transition/transition_bloc.dart';
 
 void main() {
   runZonedGuarded(() async {
@@ -19,6 +20,8 @@ void main() {
     await EasyLocalization.ensureInitialized();
 
     await Env.shared.ensureInitialized();
+
+    await AppController.shared.register();
 
     Bloc.observer = LFBlocObserver();
 
@@ -56,48 +59,59 @@ class EggBallApp extends StatelessWidget {
     // LFLocalizations Config
     LFLocalizations.shared.config(context);
 
-    return MaterialApp(
-      title: 'EggBall App',
-      navigatorKey: AppController.shared.navigationKey,
-      localizationsDelegates: [
-        // const CupertinoLocalizationsKoFixedDelegate(),
-        ...context.localizationDelegates,
-      ],
-      supportedLocales: context.supportedLocales,
-      locale: context.locale,
-      // navigatorObservers: [
-      //   FirebaseAnalyticsObserver(analytics: analytics),
-      // ],
-      theme: ThemeData(useMaterial3: false),
-      builder: (context, widget) {
-        ErrorWidget.builder = (errorDetails) {
-          return EBRenderErrorView(
-            widget: widget,
-            errorDetails: errorDetails,
-          );
-        };
-        if (widget != null) return widget;
-        throw ('widget is null');
-      },
-      onGenerateRoute: (settings) {
-        Logging.i('[onGenerateRoute]: $settings');
-        final app = MaterialWithModalsPageRoute(
-          builder: (_) => const App(),
-          settings: settings,
-        );
-        switch (settings.name) {
-          case '/':
-            return app;
-        }
-        return app;
-      },
-      onUnknownRoute: (settings) => MaterialPageRoute(
-        builder: (context) => EBUndefinedView(
-          name: settings.name ?? '',
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => TransitionBloc()..add(TransitionSplashEvent()),
         ),
+      ],
+      child: BlocBuilder<TransitionBloc, TransitionState>(
+        builder: (context, state) {
+          return MaterialApp(
+            title: 'EggBall App',
+            navigatorKey: AppController.shared.navigationKey,
+            localizationsDelegates: [
+              // const CupertinoLocalizationsKoFixedDelegate(),
+              ...context.localizationDelegates,
+            ],
+            supportedLocales: context.supportedLocales,
+            locale: context.locale,
+            // navigatorObservers: [
+            //   FirebaseAnalyticsObserver(analytics: analytics),
+            // ],
+            theme: ThemeData(useMaterial3: false),
+            builder: (context, widget) {
+              ErrorWidget.builder = (errorDetails) {
+                return EBRenderErrorView(
+                  widget: widget,
+                  errorDetails: errorDetails,
+                );
+              };
+              if (widget != null) return widget;
+              throw ('widget is null');
+            },
+            onGenerateRoute: (settings) {
+              Logging.i('[onGenerateRoute]: $settings');
+              final app = MaterialWithModalsPageRoute(
+                builder: (_) => const App(),
+                settings: settings,
+              );
+              switch (settings.name) {
+                case '/':
+                  return app;
+              }
+              return app;
+            },
+            onUnknownRoute: (settings) => MaterialPageRoute(
+              builder: (context) => EBUndefinedView(
+                name: settings.name ?? '',
+              ),
+            ),
+            initialRoute: '/',
+            // home: App(env: env),
+          );
+        },
       ),
-      initialRoute: '/',
-      // home: App(env: env),
     );
   }
 }
