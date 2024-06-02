@@ -1,8 +1,7 @@
 import 'package:eb_components/eb_components.dart';
+import 'package:eggball/src/features/qr_scan/ui/qr_code_scanner_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart'
-    as ml;
-import 'package:image_picker/image_picker.dart';
+import 'package:flutter_leaf_kit/flutter_leaf_kit.dart';
 
 class HomeMainView extends StatelessWidget {
   const HomeMainView({super.key});
@@ -10,18 +9,29 @@ class HomeMainView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Center(
           child: ElevatedButton(
             onPressed: () async {
-              getImage(ImageSource.camera);
-              // await LFNavigation.pushNamed(
-              //   context,
-              //   '/CameraScreen',
-              //   child: const CameraScreen(),
-              //   pushType: LFNavigatorPushType.materialModal,
-              // );
+              const qrCode =
+                  'http://m.dhlottery.co.kr/?v=1121q172124333541q101820273542q173138404145q022326304041q0405151718191719215202';
+              _getLottoNumbers(qrCode);
+
+              return;
+              final r = await LFNavigation.pushNamed(
+                context,
+                '/QRCodeScannerScreen',
+                child: const QRCodeScannerScreen(),
+              );
+              if (r is Map<String, String>) {
+                final code = r['QRCODE'];
+                if (code != null) {
+                  // http://m.dhlottery.co.kr/?v=1121q172124333541q101820273542q173138404145q022326304041q0405151718191719215202
+                  print('QR Code: $code');
+                }
+              }
             },
             child: const EBText('Camera'),
           ),
@@ -30,42 +40,28 @@ class HomeMainView extends StatelessWidget {
     );
   }
 
-  Future getImage(ImageSource imageSource) async {
-    final XFile? pickedFile =
-        await ImagePicker().pickImage(source: imageSource);
-    if (pickedFile != null) {
-      final image = XFile(pickedFile.path);
-      getRecognizedText(image);
-    }
-  }
-
-  void getRecognizedText(XFile image) async {
-    final ml.InputImage inputImage = ml.InputImage.fromFilePath(image.path);
-
-    final textRecognizer =
-        ml.TextRecognizer(script: ml.TextRecognitionScript.latin);
-
-    final recognizedText = await textRecognizer.processImage(inputImage);
-
-    await textRecognizer.close();
-
-    List<String> numbers = [];
-    for (ml.TextBlock block in recognizedText.blocks) {
-      for (ml.TextLine line in block.lines) {
-        final texts = line.text.split(' ');
-        for (String word in texts) {
-          if (word.length == 2) {
-            print('word: $word');
-            word = word.replaceAll('O', '0').replaceAll('o', '0');
-            final num = int.tryParse(word);
-            if (num != null) {
-              numbers.add(word);
+  void _getLottoNumbers(String qrCode) {
+    try {
+      final uri = Uri.parse(qrCode);
+      final queryParameters = uri.queryParameters;
+      final v = queryParameters['v'];
+      if (v != null) {
+        final items = v.split('q');
+        List<List<String>> results = [];
+        for (final item in items) {
+          if (item.length >= 12) {
+            final str = item.substring(0, 12);
+            List<String> result = [];
+            for (var i = 0; i < str.length; i += 2) {
+              result.add(str.substring(i, i + 2));
             }
+            results.add(result);
           }
         }
+        print('results: $results');
       }
+    } catch (e) {
+      Logging.e('Invalid QR Code: $qrCode');
     }
-    print(numbers);
-    print(numbers.length);
   }
 }

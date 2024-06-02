@@ -16,11 +16,9 @@ dependencies:
   event_bus_plus: ^0.6.2
 
   image_picker: ^1.1.1
-  camera: ^0.11.0
+  camera: ^0.10.5+9
 
-  google_mlkit_text_recognition: ^0.13.0
-#  google_mlkit_barcode_scanning: ^0.12.0
-#  google_mlkit_digital_ink_recognition: ^0.12.0
+  qr_code_scanner: ^1.0.1
 
   # Native Splash Gen
   flutter_native_splash: ^2.4.0
@@ -29,7 +27,7 @@ dependencies:
   flutter_leaf_kit:
     git:
       url: https://github.com/JosephNK/flutter_leaf_kit.git
-      ref: 'v1.9.20-dev'
+      ref: 'v1.9.34-dev'
       path: ./packages/leaf
 
   # Project Packages
